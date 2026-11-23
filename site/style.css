@@ -101,6 +101,35 @@ a { color: inherit; }
 
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 
+/* ---------- Réseaux ---------- */
+
+.socials {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.socials a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+}
+
+.socials a span { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.socials a:hover span { text-decoration-color: var(--yellow); }
+.socials a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; border-radius: 4px; }
+.socials svg { width: 24px; height: 24px; flex: none; }
+
+.footer-socials { justify-content: center; margin: 0 0 18px; }
+.footer .socials a { color: var(--paper); }
+
 /* ---------- Frise ---------- */
 
 .timeline-section {
