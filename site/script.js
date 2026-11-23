@@ -4,7 +4,7 @@
 const DRIVE = '/photos/';
 const MAX_PHOTOS_PER_BAND = 20;  // tirées au hasard parmi les photos de la journée
 const MIN_ITEMS_PER_HALF = 6;    // assez de photos pour remplir la largeur avant la boucle
-const SECONDS_PER_PHOTO = 5;
+const SCROLL_SPEED = 40;         // px par seconde
 const ORIGIN_DATE = '2026-11-03';
 
 const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
@@ -44,6 +44,30 @@ function todayIso() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+// Défilement en boucle, en pixels : la piste contient deux fois la même suite, on la décale
+// d'une demi-largeur. La distance est recalculée dès que la piste change de taille (photos
+// qui se chargent, redimensionnement), en gardant la position. Une animation CSS en
+// translateX(-50%) (sens inversé un bandeau sur deux) pouvait rester calée sur la largeur de
+// départ, quand la piste est encore vide, et laissait un bandeau sur deux tout noir.
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function animateTrack(track, reverse) {
+  if (reduceMotion || !track.animate || !('ResizeObserver' in window)) return;
+  let anim = null;
+  let lastDistance = 0;
+  new ResizeObserver(() => {
+    const distance = track.offsetWidth / 2;
+    if (!distance || distance === lastDistance) return;
+    lastDistance = distance;
+    const duration = (distance / SCROLL_SPEED) * 1000;
+    const progress = anim ? (anim.currentTime % anim.effect.getTiming().duration) / anim.effect.getTiming().duration : 0;
+    anim?.cancel();
+    const frames = [{ transform: 'translateX(0)' }, { transform: `translateX(${-distance}px)` }];
+    anim = track.animate(reverse ? frames.reverse() : frames, { duration, iterations: Infinity, easing: 'linear' });
+    anim.currentTime = progress * duration;
+  }).observe(track);
+}
+
 // les images ne sont chargées qu'à l'approche de leur bandeau
 const lazyObserver = 'IntersectionObserver' in window
   ? new IntersectionObserver(entries => {
@@ -72,7 +96,7 @@ function photoEl(photo, hidden) {
   );
 }
 
-function bandEl(event, photos) {
+function bandEl(event, photos, reverse) {
   const label = h('div', { class: 'tl-label' },
     h('span', { class: 'tl-date' }, dayLabel(event.date), h('span', { class: 'tl-year' }, event.date.slice(0, 4))),
     event.title && h('span', { class: 'tl-title' }, event.title),
@@ -91,12 +115,13 @@ function bandEl(event, photos) {
   while (half.length < MIN_ITEMS_PER_HALF) half = half.concat(shuffle(photos));
 
   // la piste contient deux fois la même suite et défile de -50% : la boucle est invisible
-  const track = h('div', { class: 'tl-track', style: { animationDuration: `${half.length * SECONDS_PER_PHOTO}s` } },
+  const track = h('div', { class: 'tl-track' },
     half.map((p, i) => photoEl(p, i >= photos.length)),
     half.map(p => photoEl(p, true)),
   );
 
   const band = h('div', { class: 'tl-band' }, track, label);
+  animateTrack(track, reverse);
   if (lazyObserver) lazyObserver.observe(band);
   return band;
 }
@@ -129,7 +154,7 @@ async function buildTimeline() {
     // de bas en haut : la plus ancienne en bas, juste au-dessus de la naissance de l'orchestre
     const items = [...events]
       .sort((a, b) => b.date.localeCompare(a.date))
-      .map(ev => h('li', { class: 'tl-item' }, bandEl(ev, byEvent.get(ev.id) || [])));
+      .map((ev, i) => h('li', { class: 'tl-item' }, bandEl(ev, byEvent.get(ev.id) || [], i % 2 === 1)));
 
     timeline.replaceChildren(...items, originEl());
   } catch {

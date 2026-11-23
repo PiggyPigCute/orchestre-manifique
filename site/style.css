@@ -230,15 +230,7 @@ a { color: inherit; }
   left: 0;
   display: flex;
   width: max-content;
-  animation: tl-scroll var(--duration, 40s) linear infinite;
-  will-change: transform;
-}
-
-.tl-item:nth-child(even) .tl-track { animation-direction: reverse; }
-
-@keyframes tl-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  will-change: transform; /* le défilement est animé en JS (script.js, animateTrack) */
 }
 
 .tl-photo {
@@ -400,6 +392,5 @@ a { color: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .tl-track { animation: none; }
   .tl-band { overflow-x: auto; }
 }
