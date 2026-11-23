@@ -80,9 +80,9 @@ function bandEl(event, photos) {
   );
 
   if (!photos.length) {
-    return h('a', { class: 'tl-band is-empty', href: DRIVE },
+    return h('div', { class: 'tl-band is-empty' },
       label,
-      event.date <= todayIso() && h('span', { class: 'tl-empty-text' }, 'Pas encore de photos : ajoute les tiennes'),
+      event.date <= todayIso() && h('span', { class: 'tl-empty-text' }, 'Pas encore de photos'),
     );
   }
 
@@ -96,11 +96,7 @@ function bandEl(event, photos) {
     half.map(p => photoEl(p, true)),
   );
 
-  const band = h('a', {
-    class: 'tl-band',
-    href: DRIVE,
-    'aria-label': `${dayLabel(event.date)} ${event.date.slice(0, 4)}${event.title ? `, ${event.title}` : ''} : voir les photos`,
-  }, track, label);
+  const band = h('div', { class: 'tl-band' }, track, label);
   if (lazyObserver) lazyObserver.observe(band);
   return band;
 }
