@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Photos — Orchestre Manif'ique</title>
+<meta name="description" content="Le drive photo public de l'Orchestre Manif'ique : partagez vos photos de nos sorties en manifestation.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="/">← Orchestre Manif'ique</a>
+  <div class="topbar-actions">
+    <span class="admin-badge" id="adminBadge" hidden>Admin</span>
+    <button class="btn btn-ghost" id="adminBtn" type="button">Admin</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="page-title">Les photos</h1>
+  <p class="lead">Tu étais là ? Dépose tes photos, autant que tu veux. Elles sont publiques et apparaissent sur la frise du site.</p>
+
+  <!-- Envoi -->
+  <section class="card upload" id="uploadSection" aria-labelledby="uploadTitle">
+    <h2 id="uploadTitle">Ajouter des photos</h2>
+
+    <p class="notice" id="noEventsNotice" hidden>Aucune date n'est encore ouverte : un·e admin doit d'abord ajouter les dates où l'orchestre a joué.</p>
+
+    <div class="upload-fields">
+      <label class="field">
+        <span>Nom à créditer</span>
+        <input type="text" id="creditInput" maxlength="60" placeholder="Ex. Camille D." autocomplete="name">
+      </label>
+      <label class="field">
+        <span>Date (par défaut)</span>
+        <select id="defaultEventSelect"></select>
+      </label>
+    </div>
+
+    <label class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple>
+      <strong>Glisse tes photos ici</strong>
+      <span>ou clique pour les choisir, plusieurs d'un coup</span>
+    </label>
+    <p class="hint">Si une photo contient sa date de prise de vue et qu'elle correspond à une sortie, la bonne date est choisie toute seule. Tu peux la changer photo par photo.</p>
+
+    <div class="queue-bar" id="queueBar" hidden>
+      <span id="queueSummary"></span>
+      <div class="queue-actions">
+        <button class="btn btn-ghost" id="clearQueueBtn" type="button">Tout retirer</button>
+        <button class="btn btn-primary" id="sendBtn" type="button">Envoyer</button>
+      </div>
+    </div>
+    <div class="progress" id="progress" hidden><div class="progress-fill" id="progressFill"></div></div>
+    <p class="form-error" id="uploadError" role="alert" hidden></p>
+    <ul class="queue" id="queue"></ul>
+  </section>
+
+  <!-- Admin : évènements -->
+  <section class="card admin-events" id="eventsAdmin" hidden aria-labelledby="eventsTitle">
+    <h2 id="eventsTitle">Dates des sorties</h2>
+    <p class="hint">Les photos se rangent dans ces dates. Supprimer une date demande de supprimer aussi ses photos.</p>
+    <ul class="event-rows" id="eventRows"></ul>
+    <form class="event-row event-row-new" id="newEventForm">
+      <input type="date" name="date" required aria-label="Date">
+      <input type="text" name="title" maxlength="80" placeholder="Intitulé (facultatif)" aria-label="Intitulé">
+      <button class="btn btn-primary" type="submit">Ajouter</button>
+    </form>
+  </section>
+
+  <!-- Galerie -->
+  <section class="gallery-section" aria-labelledby="galleryTitle">
+    <div class="gallery-head">
+      <h2 id="galleryTitle">Galerie</h2>
+      <div class="admin-toolbar" id="adminToolbar" hidden>
+        <span id="selectionCount">0 sélectionnée</span>
+        <button class="btn btn-ghost" id="clearSelectionBtn" type="button">Désélectionner</button>
+        <button class="btn btn-danger" id="deleteSelectionBtn" type="button" disabled>Supprimer</button>
+      </div>
+    </div>
+    <div class="chips" id="filterChips" role="tablist" aria-label="Filtrer par date"></div>
+    <div id="gallery"></div>
+    <p class="empty" id="galleryEmpty" hidden>Pas encore de photos. Sois la première personne à en ajouter !</p>
+  </section>
+</main>
+
+<!-- Visionneuse -->
+<dialog class="lightbox" id="lightbox" aria-label="Photo">
+  <button class="lb-close" id="lbClose" type="button" aria-label="Fermer">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev" type="button" aria-label="Photo précédente">‹</button>
+  <figure class="lb-figure">
+    <img id="lbImg" alt="">
+    <figcaption>
+      <span id="lbCaption"></span>
+      <span class="lb-actions">
+        <a class="btn btn-ghost btn-light" id="lbDownload" download>Télécharger</a>
+        <button class="btn btn-danger" id="lbDelete" type="button" hidden>Supprimer</button>
+      </span>
+    </figcaption>
+  </figure>
+  <button class="lb-nav lb-next" id="lbNext" type="button" aria-label="Photo suivante">›</button>
+</dialog>
+
+<!-- Connexion admin -->
+<dialog class="modal" id="loginDialog">
+  <form id="loginForm" method="dialog">
+    <h2>Connexion admin</h2>
+    <label class="field">
+      <span>Mot de passe</span>
+      <input type="password" id="passwordInput" autocomplete="current-password" required>
+    </label>
+    <p class="form-error" id="loginError" role="alert" hidden></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" type="button" id="loginCancel">Annuler</button>
+      <button class="btn btn-primary" type="submit">Se connecter</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>

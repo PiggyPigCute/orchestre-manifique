@@ -1,0 +1,368 @@
+:root {
+  --paper: #f6f0e4;
+  --ink: #17140f;
+  --ink-soft: #5b5348;
+  --red: #e3311d;
+  --red-dark: #b8240f;
+  --yellow: #f6c445;
+  --display: 'Anton', 'Impact', sans-serif;
+  --body: 'Archivo', system-ui, sans-serif;
+  --rail: 40px; /* largeur réservée à la ligne de la frise */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+a { color: inherit; }
+
+/* ---------- Boutons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 3px solid currentColor;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .1s, background .15s, color .15s;
+}
+
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+.btn-primary:hover { background: #fff; border-color: #fff; }
+.btn-outline { color: var(--paper); }
+.btn-outline:hover { background: var(--paper); color: var(--red); border-color: var(--paper); }
+.btn:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+
+/* ---------- En-tête ---------- */
+
+.hero {
+  position: relative;
+  padding: clamp(56px, 12vw, 130px) 16px clamp(48px, 9vw, 100px);
+  background: var(--red);
+  color: var(--paper);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* rayures d'affiche en fond */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  z-index: -1;
+  background: repeating-linear-gradient(-28deg, transparent 0 60px, rgba(0, 0, 0, .07) 60px 120px);
+}
+
+.hero > * { max-width: 1100px; margin-left: auto; margin-right: auto; }
+
+.hero-kicker {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .85rem;
+  margin-bottom: 14px;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: .88;
+  margin-top: 0;
+  margin-bottom: 28px;
+  font-size: clamp(3.4rem, 14vw, 9.5rem);
+  letter-spacing: -.005em;
+}
+
+.hero-title span { display: block; }
+
+.hero-title-accent {
+  color: var(--ink);
+  text-shadow: 4px 4px 0 var(--yellow);
+}
+
+.hero-text {
+  font-size: clamp(1.1rem, 2.6vw, 1.45rem);
+  font-weight: 500;
+  max-width: 34ch;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.hero-born { font-size: 1.1rem; margin-top: 0; }
+
+.hero-born strong {
+  background: var(--ink);
+  color: var(--yellow);
+  padding: 1px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+/* ---------- Frise ---------- */
+
+.timeline-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 90px) 16px 40px;
+}
+
+.timeline-head h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(2.4rem, 8vw, 4.4rem);
+  line-height: 1;
+  margin: 0 0 8px;
+}
+
+.timeline-head p { color: var(--ink-soft); max-width: 60ch; margin: 0 0 40px; }
+
+.timeline {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 34px 0 0 var(--rail);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* la ligne, qui monte vers les sorties les plus récentes */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  bottom: 20px;
+  width: 5px;
+  background: var(--ink);
+  border-radius: 3px;
+}
+
+.timeline::after {
+  content: '';
+  position: absolute;
+  left: 4px; /* centré sur la ligne (12px + 5px / 2 - 10.5px) */
+  top: 0;
+  width: 0;
+  height: 0;
+  border-left: 10.5px solid transparent;
+  border-right: 10.5px solid transparent;
+  border-bottom: 18px solid var(--ink);
+}
+
+.tl-item { position: relative; }
+
+/* point sur la ligne */
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--rail) + 6px);
+  top: 50%;
+  width: 17px;
+  height: 17px;
+  margin-top: -8.5px;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: 4px solid var(--ink);
+}
+
+.tl-band {
+  position: relative;
+  display: block;
+  height: clamp(200px, 34vw, 340px);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ink);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+/* assombrit le côté gauche pour la lisibilité de la date */
+.tl-band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(23, 20, 15, .55), rgba(23, 20, 15, 0) 55%);
+}
+
+.tl-track {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  width: max-content;
+  animation: tl-scroll var(--duration, 40s) linear infinite;
+  will-change: transform;
+}
+
+.tl-item:nth-child(even) .tl-track { animation-direction: reverse; }
+.tl-band:hover .tl-track, .tl-band:focus-visible .tl-track { animation-play-state: paused; }
+
+@keyframes tl-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.tl-photo {
+  position: relative;
+  flex: none;
+  height: 100%;
+  margin: 0;
+  padding-right: 6px; /* pas de gap : les deux moitiés de la piste doivent faire la même largeur */
+}
+
+.tl-photo img {
+  display: block;
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+  background: #2a251e;
+}
+
+.tl-photo figcaption {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 2;
+  max-width: calc(100% - 22px);
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .62);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tl-label {
+  position: absolute;
+  z-index: 3;
+  left: clamp(14px, 3vw, 28px);
+  top: 50%;
+  transform: translateY(-50%) rotate(-3deg);
+  transform-origin: left center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.tl-date {
+  font-family: var(--display);
+  text-transform: uppercase;
+  font-size: clamp(2rem, 7.5vw, 4.6rem);
+  line-height: 1;
+  background: var(--yellow);
+  color: var(--ink);
+  padding: .08em .3em .12em;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.tl-year {
+  font-size: .45em;
+  color: var(--red);
+  margin-left: .25em;
+  vertical-align: .35em;
+}
+
+.tl-title, .tl-tag {
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: clamp(.8rem, 2vw, 1rem);
+  padding: 3px 10px;
+  max-width: min(60vw, 460px);
+}
+
+.tl-tag { background: var(--red); text-transform: uppercase; letter-spacing: .06em; font-size: .75rem; }
+
+/* sortie sans photo */
+.tl-band.is-empty {
+  background:
+    repeating-linear-gradient(-45deg, rgba(246, 240, 228, .05) 0 16px, transparent 16px 32px),
+    var(--ink);
+}
+
+.tl-empty-text {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  z-index: 2;
+  color: rgba(246, 240, 228, .75);
+  font-size: .9rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* naissance de l'orchestre, tout en bas */
+.tl-origin {
+  padding: 18px 0 4px;
+}
+
+.tl-origin::before { background: var(--red); width: 25px; height: 25px; margin-top: -12.5px; left: calc(-1 * var(--rail) + 2px); }
+
+.tl-origin-date {
+  font-family: var(--display);
+  text-transform: uppercase;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  line-height: 1;
+}
+
+.tl-origin-date span { color: var(--red); }
+.tl-origin p { margin: 4px 0 0; font-weight: 700; }
+
+.timeline-loading, .timeline-error { color: var(--ink-soft); padding: 20px 0; }
+
+/* ---------- Pied de page ---------- */
+
+.footer {
+  margin-top: 40px;
+  padding: 36px 16px 48px;
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+}
+
+.footer a { color: var(--yellow); font-weight: 700; }
+
+/* ---------- Mobile & accessibilité ---------- */
+
+@media (max-width: 600px) {
+  :root { --rail: 30px; }
+  .timeline::before { left: 8px; width: 4px; }
+  .timeline::after { left: -.5px; }
+  .tl-item::before { width: 14px; height: 14px; margin-top: -7px; border-width: 3px; left: calc(-1 * var(--rail) + 3px); }
+  .tl-origin::before { width: 20px; height: 20px; margin-top: -10px; left: calc(-1 * var(--rail)); }
+  .tl-band { box-shadow: 4px 4px 0 var(--ink); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .tl-track { animation: none; }
+  .tl-band { overflow-x: auto; }
+}

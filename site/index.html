@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L'Orchestre Manif'ique</title>
+<meta name="description" content="L'Orchestre Manif'ique est un orchestre qui joue lors des manifestations, créé le 3 novembre 2026.">
+<meta property="og:title" content="L'Orchestre Manif'ique">
+<meta property="og:description" content="Un orchestre qui joue lors des manifestations, créé le 3 novembre 2026.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <p class="hero-kicker">Musique en manif · depuis le 3 novembre 2026</p>
+  <h1 class="hero-title">
+    <span>L'Orchestre</span>
+    <span class="hero-title-accent">Manif'ique</span>
+  </h1>
+  <p class="hero-text">
+    L'Orchestre Manif'ique est un orchestre qui joue lors des manifestations.
+  </p>
+  <p class="hero-born">Créé le <strong>3 novembre 2026</strong>.</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="#frise">Nos sorties ↓</a>
+    <a class="btn btn-outline" href="/photos/">Partager tes photos</a>
+  </div>
+</header>
+
+<main id="frise" class="timeline-section" aria-labelledby="friseTitle">
+  <div class="timeline-head">
+    <h2 id="friseTitle">Nos sorties</h2>
+    <p>De la première à la dernière, en remontant le temps. Les photos sont celles que vous avez déposées sur <a href="/photos/">le drive</a>.</p>
+  </div>
+
+  <ol class="timeline" id="timeline" aria-live="polite">
+    <li class="timeline-loading">Chargement de la frise…</li>
+  </ol>
+</main>
+
+<footer class="footer">
+  <p>Tu as des photos d'une de nos sorties ? <a href="/photos/">Dépose-les sur le drive</a>, elles apparaîtront ici.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
