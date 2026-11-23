@@ -108,8 +108,11 @@ function bandEl(event, photos) {
 function originEl() {
   const [y] = ORIGIN_DATE.split('-');
   return h('li', { class: 'tl-item tl-origin' },
-    h('div', { class: 'tl-origin-date' }, dayLabel(ORIGIN_DATE), ' ', h('span', {}, y)),
-    h('p', {}, 'Naissance de l\'Orchestre Manif\'ique'),
+    h('img', { class: 'tl-origin-logo', src: 'img/logo.png', width: '900', height: '462', alt: '' }),
+    h('div', {},
+      h('div', { class: 'tl-origin-date' }, dayLabel(ORIGIN_DATE), ' ', h('span', {}, y)),
+      h('p', {}, 'Naissance de l\'Orchestre Manif\'ique'),
+    ),
   );
 }
 
