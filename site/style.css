@@ -202,9 +202,13 @@ a { color: inherit; }
 }
 
 .tl-band {
+  /* hauteur en longueur fixe, réutilisée telle quelle par les photos : avec des height: 100%
+     en cascade, la largeur max-content de la piste comptait la taille d'origine de chaque
+     image au lieu de sa taille affichée, ce qui laissait de grands vides noirs */
+  --band-h: clamp(200px, 34vw, 340px);
   position: relative;
   display: block;
-  height: clamp(200px, 34vw, 340px);
+  height: var(--band-h);
   border-radius: 12px;
   overflow: hidden;
   background: var(--ink);
@@ -226,7 +230,6 @@ a { color: inherit; }
 .tl-track {
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 0;
   display: flex;
   width: max-content;
@@ -236,15 +239,14 @@ a { color: inherit; }
 .tl-photo {
   position: relative;
   flex: none;
-  height: 100%;
   margin: 0;
   padding-right: 6px; /* pas de gap : les deux moitiés de la piste doivent faire la même largeur */
 }
 
 .tl-photo img {
   display: block;
-  height: 100%;
-  width: auto;
+  height: var(--band-h);
+  width: auto; /* déduite du style aspect-ratio posé par script.js, même avant chargement */
   object-fit: cover;
   background: #2a251e;
 }
